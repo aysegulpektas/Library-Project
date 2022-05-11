@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    
+    <script>
+        function ModalKapat() {
+            document.getElementById("uyeGuncelleModal").style.display = "none";
+            document.getElementById("kitapGuncelleModal").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <center>
+
+                    <font class="anabaslik">Menü</font><br /><br />
+                    <ul class="list-group">
+                        <li id="anasayfaBtn" style="cursor:pointer;" class="list-group-item">Anasayfa</li>
+                        <li id="uyeDuzenleBtn" style="cursor:pointer;" class="list-group-item">Üyeleri Düzenle</li>
+                        <li id="uyeSorgulaBtn" style="cursor:pointer;" class="list-group-item">Üye Sorgula</li>
+                        <li id="kitapDuzenleBtn" style="cursor:pointer;" class="list-group-item">Kitapları Düzenle</li>
+                        <li id="oduncBtn" style="cursor:pointer;" class="list-group-item">Ödünç Ver / Al</li>
+                    </ul>
+                </center>
+            </div>
+            <div class="col-md-10">
+                <center>
+                    <div ng-app="Kutuphane">
+                        <font class="anabaslik">Kütüphane Yönetim Sistemi</font>
+                        <br /><br />
+                        <font class="tabloBaslik">Üyeler</font><br /><br />
+                        <div ng-controller="UyeGetir">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col"><p>Üye No</p></th>
+                                        <th scope="col"><p>Ad</p></th>
+                                        <th scope="col"><p>Soyad</p></th>
+                                        <th scope="col"><p>Tc</p></th>
+                                        <th scope="col"><p>Telefon</p></th>
+                                        <th scope="col"><p>Üyeyi sil</p></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="uye in Uyeler">
+                                        <td><p>{{uye.id}}</p></td>
+                                        <td><p>{{uye.ad}}</p></td>
+                                        <td><p>{{uye.soyad}}</p></td>
+                                        <td><p>{{uye.tcNo}}</p></td>
+                                        <td><p>{{uye.telefonNo}}</p></td>
+                                        <td><button type="button" ng-click="UyeSil(uye.id)" class="btn btn-primary">Üye kaydını sil</button></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <font class="arabaslik">Üye Ekle / Güncelle</font><br />
+                            <td><input class="inputTxt" ng-model="inp.uyeAdi" type="text" placeholder="Üye adı" /></td><br />
+                            <td><input class="inputTxt" ng-model="inp.uyeSoyadi" type="text" placeholder="Üye soyadı" /></td><br />
+                            <td><input class="inputTxt" ng-model="inp.uyeTc" type="text" placeholder="TC No" /></td><br />
+                            <td><input class="inputTxt" ng-model="inp.uyeTelefon" type="text" placeholder="Telefon Numarası" /></td><br />
+                            <td><button type="button" ng-click="UyeEkle(inp.uyeAdi,inp.uyeSoyadi,inp.uyeTc,inp.uyeTelefon)" class="inputBtn btn btn-primary">Üyeyi ekle</button></td>
+                            <td><button type="button" ng-click="KitapGuncellemeMenusuAc()" class="inputBtn btn btn-primary">Üye Güncelle</button></td>
+                        </div><br /><br />
+                        <font class="tabloBaslik">Kitaplar</font><br /><br />
+                        <div ng-controller="KitapGetir">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><p>Kitap Id</p></th>
+                                        <th scope="col"><p>Kitap Adi</p></th>
+                                        <th scope="col"><p>Yazar</p></th>
+                                        <th scope="col"><p>Barkod No</p></th>
+                                        <th scope="col"><p>Kitabı Sil</p></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="kitap in Kitaplar">
+                                        <td><p>{{kitap.id}}</p></td>
+                                        <td><p>{{kitap.kitapAdi}}</p></td>
+                                        <td><p>{{kitap.yazar}}</p></td>
+                                        <td><p>{{kitap.barkodNo}}</p></td>
+
+                                        <td><button type="button" ng-click="KitapSil(kitap.id)" class="btn btn-primary">Kitabı sil</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <td><input class="inputTxt" ng-model="inp.barkod" type="text" placeholder="Barkod No" /></td><br />
+                            <td><input class="inputTxt" ng-model="inp.kitapAdi" type="text" placeholder="Kitap Adı" /></td><br />
+                            <td><input class="inputTxt" ng-model="inp.yazar" type="text" placeholder="Yazar" /></td><br />
+                            <td><button type="button" ng-click="KitapEkle(inp.kitapAdi,inp.yazar,inp.barkod)" class="inputBtn btn btn-primary">Kitabı Ekle</button></td>
+                            <td><button type="button" ng-click="KitapGuncellemeMenusuAc()" class="inputBtn btn btn-primary">Kitap Güncelle</button></td>
+
+                        </div>
+                        <br /><br />
+                        <font class="tabloBaslik">Ödünç Alınan Kitaplar</font><br /><br />
+                        <div ng-controller="OduncGetir">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+
+                                        <th scope="col"><p>Üye Adı - Soyadı</p></th>
+                                        <th scope="col"><p>Üye Tc</p></th>
+                                        <th scope="col"><p>Kitap Adı</p></th>
+                                        <th scope="col"><p>Barkod No</p></th>
+                                        <th scope="col"><p>Alinma Tarihi</p></th>
+                                        <th scope="col"><p>Geri verme tarihi</p></th>
+                                        <th scope=" ="col"><p>Ödünç alma kaydını sil</p></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="odunc in OduncDetaylari">
+                                        <td><p>{{odunc.uyeAdi}} {{odunc.uyeSoyadi}}</p></td>
+                                        <td><p>{{odunc.uyeTcNo}}</p></td>
+                                        <td><p>{{odunc.kitapAdi}}</p></td>
+                                        <td><p>{{odunc.kitapBarkodNo}}</p></td>
+                                        <td><p>{{odunc.oduncAlmaTarihi | date:'dd-MM-yyyy hh:mm'}}</p></td>
+                                        <td><p ng-show="odunc.geriVermeTarihi!=null">{{odunc.geriVermeTarihi | date:'dd-MM-yyyy hh:mm'}}</p><button type="button" ng-show="odunc.geriVermeTarihi==null" ng-click="GeriAl(odunc.id)" class="btn btn-primary">Kitabı geri al</button></td>
+                                        <td><button type="button" ng-click="OduncSil(odunc.id)" class="btn btn-primary">Kaydı sil</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <input class="inputTxt" type="text" ng-model="inp.uyeNo" placeholder="TC No" /><br />
+                            <input class="inputTxt" type="text" ng-model="inp.kitapId" placeholder="Barkod No" /><br />
+                            <button type="button" ng-click="OduncVer(inp.uyeNo,inp.kitapId)" class="inputBtn btn btn-primary">Kitabı ödünç ver</button>
+                        </div>
+                        <!-- ÜyeGüncelle Modal -->
+                        <div class="modal" ng-controller="UyeGetir" id="uyeGuncelleModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modal title</h5>
+                                        <button type="button" onclick="ModalKapat()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="number" id="uyeadi" ng-model="duzenlenecekid" placeholder="Düzenlenecek üye id" /><br /><br />
+                                        <input type="text" id="uyeadi" ng-model="duzenlenecek1" placeholder="Ad" /><br /><br />
+                                        <input type="text" id="uyesoyadi" ng-model="duzenlenecek2" placeholder="Soyad" /><br /><br />
+                                        <input type="text" id="uyesoyadi" ng-model="duzenlenecek3" placeholder="Tc" /><br /><br />
+                                        <input type="text" id="uyesoyadi" ng-model="duzenlenecek4" placeholder="Telefon" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" onclick="ModalKapat()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                        <button type="button" ng-click="UyeGuncelle(duzenlenecekid,duzenlenecek1,duzenlenecek2,duzenlenecek3,duzenlenecek4)" class="btn btn-primary">Kaydet</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal" ng-controller="KitapGetir" id="kitapGuncelleModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ModalKapat()" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="number" id="duzenlenecekid" ng-model="duzenlenecekid" placeholder="Düzenlenecek kitap id" /><br /><br />
+                                        <input type="text" id="kitapadi" ng-model="duzenlenecek1" placeholder="Kitap Adı" /><br /><br />
+                                        <input type="text" id="kitapyazari" ng-model="duzenlenecek2" placeholder="Yazar" /><br /><br />
+                                        <input type="text" id="kitapyazari" ng-model="duzenlenecek3" placeholder="Barkod No" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" onclick="ModalKapat()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                        <button type="button" ng-click="KitapGuncelle(duzenlenecekid,duzenlenecek1,duzenlenecek2,duzenlenecek3)" class="btn btn-primary">Kaydet</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                    </div>
+
+                </center>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('Kutuphane', []);
+        app.controller('UyeGetir', function ($scope, $http) {
+            $scope.duzenlenecekid = null;
+            $scope.duzenlenecek1 = null;
+            $scope.duzenlenecek2 = null;
+            $scope.duzenlenecek3 = null;
+            $scope.duzenlenecek4 = null;
+            $http.get("api/uyeler/tumunulistele").then(function (response) {
+                $scope.Uyeler = response.data;
+                console.log(response.data);
+            }, function (error) {
+                alert("Bir hata oluştu");
+                console.log(error);
+            });
+            $scope.id = null;
+            $scope.ad = null;
+            $scope.soyad = null;
+            $scope.UyeSil = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/uyeler/sil", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    })
+            }
+            $scope.UyeEkle = function (ad, soyad, tc, telefon) {
+                var data = {
+                    ad: ad,
+                    soyad: soyad,
+                    tcNo: tc,
+                    telefonNo: telefon
+
+                }
+                $http.post("/api/uyeler/ekle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.UyeGuncelle = function (id, ad, soyad, tc, telefon) {
+                var data = {
+                    id: id,
+                    ad: ad,
+                    soyad: soyad,
+                    tcNo: tc,
+                    telefonNo: telefon
+
+                }
+                $http.post("/api/uyeler/guncelle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.KitapGuncellemeMenusuAc = function () {
+                document.getElementById("uyeGuncelleModal").style.display = "block";
+            }
+        });
+        app.controller('KitapGetir', function ($scope, $http) {
+            $scope.duzenlenecekid = null;
+            $scope.duzenlenecek1 = null;
+            $scope.duzenlenecek2 = null;
+            $http.get("api/kitaplar/tumunulistele").then(function (response) {
+                $scope.Kitaplar = response.data;
+                console.log(response.data);
+            });
+            $scope.id = null;
+            $scope.kitapAdi = null;
+            $scope.yazar = null;
+            $scope.KitapSil = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/kitaplar/sil", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.KitapEkle = function (kitapAdi, yazar, barkod) {
+                var data = {
+                    kitapAdi: kitapAdi,
+                    yazar: yazar,
+                    barkodNo: barkod
+
+                }
+                $http.post("/api/kitaplar/ekle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+
+            }
+            $scope.KitapGuncelle = function (id, kitapAdi, yazar, barkod) {
+                var data = {
+                    id: id,
+                    kitapAdi: kitapAdi,
+                    yazar: yazar,
+                    barkodNo: barkod
+
+                }
+                $http.post("/api/kitaplar/guncelle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+
+            }
+            $scope.KitapGuncellemeMenusuAc = function () {
+                document.getElementById("kitapGuncelleModal").style.display = "block";
+            }
+
+
+        });
+        app.controller('OduncGetir', function ($scope, $http) {
+            $http.get("api/oduncler/tumunulistele").then(function (response) {
+                $scope.Oduncler = response.data;
+                console.log(response.data);
+            });
+            $scope.id = null;
+            $scope.kisiId = null;
+            $scope.kitapId = null;
+
+            $scope.oduncAlmaTarihi = null;
+            $scope.geriVermeTarihi = null;
+            $scope.OduncSil = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/Oduncler/sil", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $http.get("api/oduncler/oduncdetaylari").then(function (response) {
+                $scope.OduncDetaylari = response.data;
+                console.log(response.data);
+            });
+            $scope.GeriAl = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/Oduncler/GeriGetirildi", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.OduncVer = function (TcNo, BarkodNo) {
+                const jsondate = JSON.stringify(new Date());
+                const parsed = JSON.parse(jsondate);
+                var data = {
+                    TcNo: TcNo,
+                    BarkodNo: BarkodNo
+                }
+                console.log(data);
+                $http.post("/api/Oduncler/ekle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="/menu.js"></script>
+</body>
+</html>

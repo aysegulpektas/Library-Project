@@ -1,0 +1,39 @@
+﻿body {
+    background: #f3f3f3;
+    padding: 10px;
+}
+
+div {
+    color: white;
+}
+
+.anabaslik {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+}
+
+.tabloBaslik {
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.arabaslik {
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+
+.inputBtn {
+    max-width: 250px;
+    width: 100%;
+}
+
+.inputTxt {
+    margin-bottom: 10px;
+    padding: 5px;
+    max-width: 500px;
+    min-width: 200px;
+    width: 100%;
+}

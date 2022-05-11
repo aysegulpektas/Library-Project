@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <center>
+
+                    <font class="anabaslik">Menü</font><br /><br />
+                    <ul class="list-group">
+                        <li id="anasayfaBtn" style="cursor:pointer;" class="list-group-item">Anasayfa</li>
+                        <li id="uyeDuzenleBtn" style="cursor:pointer;" class="list-group-item">Üyeleri Düzenle</li>
+                        <li id="uyeSorgulaBtn" style="cursor:pointer;" class="list-group-item">Üye Sorgula</li>
+                        <li id="kitapDuzenleBtn" style="cursor:pointer;" class="list-group-item">Kitapları Düzenle</li>
+                        <li id="oduncBtn" style="cursor:pointer;" class="list-group-item">Ödünç Ver / Al</li>
+                    </ul>
+                </center>
+            </div>
+            <div class="col-md-10">
+                <center>
+                    <div ng-app="Kutuphane">
+                        <font class="anabaslik">Kütüphane Yönetim Sistemi</font>
+                        <br /><br />
+                        <font class="tabloBaslik">Ödünç Alınan Kitaplar</font><br /><br />
+                        <div ng-controller="OduncGetir">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th scope="col"><p>Üye Adı - Soyadı</p></th>
+                                            <th scope="col"><p>Üye Tc</p></th>
+                                            <th scope="col"><p>Kitap Adı</p></th>
+                                            <th scope="col"><p>Barkod No</p></th>
+                                            <th scope="col"><p>Alinma Tarihi</p></th>
+                                            <th scope="col"><p>Geri verme tarihi</p></th>
+                                            <th scope=" ="col"><p>Ödünç alma kaydını sil</p></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="odunc in OduncDetaylari">
+                                            <td><p>{{odunc.uyeAdi}} {{odunc.uyeSoyadi}}</p></td>
+                                            <td><p>{{odunc.uyeTcNo}}</p></td>
+                                            <td><p>{{odunc.kitapAdi}}</p></td>
+                                            <td><p>{{odunc.kitapBarkodNo}}</p></td>
+                                            <td><p>{{odunc.oduncAlmaTarihi | date:'dd-MM-yyyy hh:mm'}}</p></td>
+                                            <td><p ng-show="odunc.geriVermeTarihi!=null">{{odunc.geriVermeTarihi | date:'dd-MM-yyyy hh:mm'}}</p><button type="button" ng-show="odunc.geriVermeTarihi==null" ng-click="GeriAl(odunc.id)" class="btn btn-primary">Kitabı geri al</button></td>
+                                            <td><button type="button" ng-click="OduncSil(odunc.id)" class="btn btn-primary">Kaydı sil</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <input class="inputTxt" type="text" ng-model="inp.uyeNo" placeholder="TC No" /><br />
+                                <input class="inputTxt" type="text" ng-model="inp.kitapId" placeholder="Barkod No" /><br />
+                                <button type="button" ng-click="OduncVer(inp.uyeNo,inp.kitapId)" class="inputBtn btn btn-primary">Kitabı ödünç ver</button>
+                            </div>
+                    </div>
+
+                </center>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('Kutuphane', []);
+        app.controller('OduncGetir', function ($scope, $http) {
+            $http.get("api/oduncler/tumunulistele").then(function (response) {
+                $scope.Oduncler = response.data;
+                console.log(response.data);
+            });
+            $http.get("api/oduncler/oduncdetaylari").then(function (response) {
+                $scope.OduncDetaylari = response.data;
+                console.log(response.data);
+            });
+            $scope.id = null;
+            $scope.kisiId = null;
+            $scope.kitapId = null;
+
+            $scope.oduncAlmaTarihi = null;
+            $scope.geriVermeTarihi = null;
+            $scope.OduncSil = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/Oduncler/sil", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.GeriAl = function (id) {
+                var data = {
+                    id: id
+                }
+                $http.post("/api/Oduncler/GeriGetirildi", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                        alert("Bir hata oluştu");
+                        console.log(error);
+                    })
+            }
+            $scope.OduncVer = function (TcNo, BarkodNo) {
+                const jsondate = JSON.stringify(new Date());
+                const parsed = JSON.parse(jsondate);
+                var data = {
+                    TcNo: TcNo,
+                    BarkodNo: BarkodNo
+                }
+                console.log(data);
+                $http.post("/api/Oduncler/ekle", JSON.stringify(data))
+                    .then(function (response) {
+                        alert(response.data);
+                        location.reload();
+                    }, function (error) {
+                       if (error.data.error.message != null) {
+                          alert(error.data.error.message);
+                       } else {
+                           alert("Bir hata oluştu");
+                            }
+                            console.log(error);
+                    })
+            }
+
+        });
+        function ModalKapat() {
+            document.getElementById("uyeGuncelleModal").style.display = "none";
+            document.getElementById("kitapGuncelleModal").style.display = "none";
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="/menu.js"></script>
+</body>
+</html>
