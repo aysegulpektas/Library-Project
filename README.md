@@ -1,6 +1,7 @@
 # Library-Project
 C# ile geliştirilmiş kütüphane projesi
-###Proje Özellikleri
+
+### Proje Özellikleri
 - Sisteme yeni kitap eklenebilir ve silinebilir
 - Belli bir üyenin detayları görüntülenebilir
 - Sisteme yeni üye eklenebilir ve silinebilir
